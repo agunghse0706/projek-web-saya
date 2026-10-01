@@ -1,0 +1,6 @@
+{
+  "name": "Subcontractor HSE KPI Assessment Dashboard",
+  "description": "Sistem monitoring, penilaian dan evaluasi Key Performance Indicator (KPI) HSE Subkontraktor Refinery Unit V sesuai standar K3LL.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
