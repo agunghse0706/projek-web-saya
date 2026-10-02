@@ -34,12 +34,14 @@ interface AssessmentFormProps {
   onSave: (record: HSEAssessmentRecord) => void;
   onCancel: () => void;
   initialData?: HSEAssessmentRecord | null;
+  onOpenGoogleFormsSync?: () => void;
 }
 
 export const AssessmentForm: React.FC<AssessmentFormProps> = ({
   onSave,
   onCancel,
   initialData,
+  onOpenGoogleFormsSync,
 }) => {
   const [activeStep, setActiveStep] = useState<number>(1);
   const [isCustomCompany, setIsCustomCompany] = useState<boolean>(false);
@@ -245,7 +247,19 @@ export const AssessmentForm: React.FC<AssessmentFormProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center flex-wrap gap-2">
+          {onOpenGoogleFormsSync && (
+            <button
+              type="button"
+              onClick={onOpenGoogleFormsSync}
+              className="inline-flex items-center gap-1.5 text-xs text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 px-3 py-2 rounded-md font-semibold transition-colors shadow-2xs"
+            >
+              <svg className="w-3.5 h-3.5 text-purple-700" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+              </svg>
+              <span>Tarik dari Google Forms</span>
+            </button>
+          )}
           <button
             type="button"
             onClick={handleQuickFillExample}

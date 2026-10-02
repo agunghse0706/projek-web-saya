@@ -15,6 +15,7 @@ interface HeaderProps {
   setCurrentTab: (tab: 'dashboard' | 'form' | 'contractors' | 'analytics') => void;
   onExportData: () => void;
   onResetData: () => void;
+  onOpenGoogleFormsSync?: () => void;
   recordCount: number;
 }
 
@@ -23,6 +24,7 @@ export const Header: React.FC<HeaderProps> = ({
   setCurrentTab,
   onExportData,
   onResetData,
+  onOpenGoogleFormsSync,
   recordCount,
 }) => {
   return (
@@ -58,13 +60,26 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Sistem Evaluasi & Pemantauan Kinerja K3LL Subkontraktor Kilang Minyak Balikpapan
+              Sistem Evaluasi &amp; Pemantauan Kinerja K3LL Subkontraktor Kilang Minyak Balikpapan
             </p>
           </div>
         </div>
 
         {/* Global Actions */}
         <div className="flex items-center flex-wrap gap-2">
+          {onOpenGoogleFormsSync && (
+            <button
+              onClick={onOpenGoogleFormsSync}
+              title="Tarik formulir & respon asesmen dari Google Forms"
+              className="inline-flex items-center gap-1.5 border border-purple-300 bg-purple-50 hover:bg-purple-100 text-purple-800 text-xs font-semibold px-3 py-2 rounded-md transition-colors shadow-xs"
+            >
+              <svg className="w-3.5 h-3.5 text-purple-700" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+              </svg>
+              <span>Google Forms</span>
+            </button>
+          )}
+
           <button
             onClick={() => setCurrentTab('form')}
             className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white text-xs font-semibold px-3.5 py-2 rounded-md transition-colors shadow-xs"

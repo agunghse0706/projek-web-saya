@@ -7,6 +7,7 @@ import { AssessmentForm } from './components/AssessmentForm';
 import { AssessmentDetailModal } from './components/AssessmentDetailModal';
 import { ContractorListView } from './components/ContractorListView';
 import { AnalyticsView } from './components/AnalyticsView';
+import { GoogleFormsSyncModal } from './components/GoogleFormsSyncModal';
 import { exportAssessmentsToCsv } from './utils/exportCsv';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
 
@@ -33,6 +34,7 @@ export default function App() {
   const [editingRecord, setEditingRecord] = useState<HSEAssessmentRecord | null>(null);
   const [prefilledCompany, setPrefilledCompany] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'info' } | null>(null);
+  const [isGoogleFormsModalOpen, setIsGoogleFormsModalOpen] = useState<boolean>(false);
 
   // Sync to localStorage
   useEffect(() => {
@@ -48,6 +50,21 @@ export default function App() {
     setTimeout(() => {
       setToastMessage(null);
     }, 3500);
+  };
+
+  const handleImportGoogleFormsAssessments = (importedRecords: HSEAssessmentRecord[]) => {
+    const existingIds = new Set(assessments.map(a => a.id));
+    const newRecords = importedRecords.filter(r => !existingIds.has(r.id));
+    
+    if (newRecords.length === 0) {
+      showToast('Semua respon yang dipilih sudah ada di dalam database evaluasi.', 'info');
+      return;
+    }
+
+    const updated = [...newRecords, ...assessments];
+    setAssessments(updated);
+    showToast(`${newRecords.length} respon evaluasi dari Google Forms berhasil diimpor!`);
+    setCurrentTab('dashboard');
   };
 
   const handleSaveAssessment = (savedRecord: HSEAssessmentRecord) => {
@@ -117,6 +134,7 @@ export default function App() {
         }}
         onExportData={handleExportData}
         onResetData={handleResetData}
+        onOpenGoogleFormsSync={() => setIsGoogleFormsModalOpen(true)}
         recordCount={assessments.length}
       />
 
@@ -137,6 +155,7 @@ export default function App() {
         {currentTab === 'form' && (
           <AssessmentForm
             onSave={handleSaveAssessment}
+            onOpenGoogleFormsSync={() => setIsGoogleFormsModalOpen(true)}
             onCancel={() => {
               setEditingRecord(null);
               setPrefilledCompany(null);
@@ -178,6 +197,14 @@ export default function App() {
           onEdit={handleEditRecord}
         />
       )}
+
+      {/* Google Forms Sync & Import Modal */}
+      <GoogleFormsSyncModal
+        isOpen={isGoogleFormsModalOpen}
+        onClose={() => setIsGoogleFormsModalOpen(false)}
+        onImportAssessments={handleImportGoogleFormsAssessments}
+        existingAssessmentsCount={assessments.length}
+      />
 
       {/* Bottom Footer */}
       <footer className="border-t border-slate-200 bg-white py-4 mt-auto no-print">
